@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This file is part of PHP DotEnv
+  ~
+  ~ @author    Vitor Reis <vitor@d5w.com.br>
+  ~ @copyright 2022 D5W Group. All rights reserved.
+  -->
+
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    testdox="true"
+    cacheResult="false"
+>
+    <php>
+        <ini name="error_reporting" value="0" />
+        <ini name="xdebug.overload_var_dump" value="0" />
+    </php>
+    <testsuites>
+        <testsuite name="PHP DotEnv Unit Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
