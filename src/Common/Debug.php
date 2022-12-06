@@ -1,18 +1,14 @@
 <?php
 /**
  * This file is part of PHP DotEnv
- *
- * @author    Vitor Reis <vitor@d5w.com.br>
- * @copyright 2022 D5W Group. All rights reserved.
+ * @author Vitor Reis <vitor@d5w.com.br>
  */
 
-namespace DotEnv\Utils;
+namespace DotEnv\Common;
 
 /**
  * Trait Debug
- *
- * @package DotEnv\Utils
- * @author  Vitor Reis <vitor@d5w.com.br>
+ * @package DotEnv\Common
  */
 trait Debug
 {
@@ -36,7 +32,7 @@ trait Debug
      */
     public static function enableDebug()
     {
-        self::$debug = true;
+        static::$debug = true;
     }
 
     /**
@@ -45,6 +41,6 @@ trait Debug
      */
     public static function disableDebug()
     {
-        self::$debug = false;
+        static::$debug = false;
     }
 }

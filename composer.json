@@ -1,7 +1,7 @@
 {
   "name": "vitorsreis/dotenv",
-  "description": "PHP DotEnv - Simple library for load .env files in php runtime with static class",
-  "version": "1.0.0",
+  "description": "PHP DotEnv - Simple library for load .env files in php runtime",
+  "version": "2.0.0",
   "type": "library",
   "license": "MIT",
   "homepage": "https://github.com/vitorsreis/dotenv",
@@ -13,9 +13,6 @@
     }
   ],
   "autoload": {
-    "files": [
-      "src/bootstrap.php"
-    ],
     "psr-4": {
       "DotEnv\\": "src/"
     }
@@ -24,6 +21,8 @@
     "psr-4": {
       "DotEnv\\Test\\": "tests/"
     }
+  },
+  "require": {
   },
   "require-dev": {
     "phpunit/phpunit": "^5.7",

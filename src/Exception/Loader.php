@@ -1,9 +1,7 @@
 <?php
 /**
  * This file is part of PHP DotEnv
- *
- * @author    Vitor Reis <vitor@d5w.com.br>
- * @copyright 2022 D5W Group. All rights reserved.
+ * @author Vitor Reis <vitor@d5w.com.br>
  */
 
 namespace DotEnv\Exception;
@@ -12,9 +10,7 @@ use Exception;
 
 /**
  * Class Loader
- *
  * @package DotEnv\Exception
- * @author  Vitor Reis <vitor@d5w.com.br>
  */
 class Loader extends Exception
 {
