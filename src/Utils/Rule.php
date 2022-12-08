@@ -9,6 +9,7 @@ namespace DotEnv\Utils;
 use DotEnv\DotEnv;
 use DotEnv\Exception\Runtime;
 use phpDocumentor\Reflection\Types\Boolean;
+use ReflectionClass;
 
 /**
  * class Rule
@@ -142,6 +143,11 @@ class Rule
     private $rules;
 
     /**
+     * @var array|null
+     */
+    private static $reflectionConstants = null;
+
+    /**
      * @param  array $rules Rules
      * @throws Runtime
      */
@@ -171,9 +177,14 @@ class Rule
     {
         if ($rules && is_array($rules)) {
             foreach ($rules as $rule => $value) {
-                # NOT DEFINED VALUE FOR BOOL RULES
+                # NOT DEFINED VALUE
                 if (is_numeric($rule)) {
-                    if (in_array($value, (new \ReflectionClass($this))->getConstants())) {
+                    # MEMORY PREVENT
+                    if (is_null(static::$reflectionConstants)) {
+                        static::$reflectionConstants = (new ReflectionClass($this))->getConstants();
+                    }
+
+                    if (in_array($value, static::$reflectionConstants)) {
                         $rule = $value;
                         $value = true;
                     } elseif (is_string($value)) {

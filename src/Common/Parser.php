@@ -10,7 +10,6 @@ use DotEnv\Exception\Loader;
 use DotEnv\Exception\Runtime;
 use DotEnv\Exception\Syntax;
 use DotEnv\Utils\Converter;
-use PHP_CodeSniffer\Tokenizers\PHP;
 
 /**
  * Trait Parser
