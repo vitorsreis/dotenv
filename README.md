@@ -132,21 +132,25 @@ Validation usage example:
     
     $dotenv->scheme([
         'IS_SUDO' => [
-            'convert' => \DotEnv\Utils\Converter::TO_BOOL_OR_NULL
+            'convert' => \DotEnv\Utils\Converter::TO_BOOL
         ],
 
         'IS_ADMIN' => [
             'convert' => \DotEnv\Utils\Converter::TO_BOOL_OR_NULL,
-            'rules' => [ \DotEnv\Utils\Rule::IS_REQUIRED, \DotEnv\Utils\Rule::IS_BOOL ]
+            'rules' => [
+                \DotEnv\Utils\Rule::IS_REQUIRED,
+                \DotEnv\Utils\Rule::IS_BOOL
+            ]
         ],
 
         'FACTOR' => [
-            'convert' => function ($value) => { // TO_CUSTOM
+            'convert' => function ($value) => { // <callable> for TO_CUSTOM
                 return intval($value) * 100;
             },
             'rules' => [
-                \DotEnv\Utils\Rule::IS_INT => true,
-                \DotEnv\Utils\Rule::IS_RANGE_VALUE => [ 'min' => 10, 'max' => 200 ]
+                \DotEnv\Utils\Rule::IS_INT,
+                \DotEnv\Utils\Rule::IS_MIN_VALUE => 10,
+                \DotEnv\Utils\Rule::IS_MAX_VALUE => 200,
             ]
         ]
 
@@ -155,7 +159,7 @@ Validation usage example:
                 \DotEnv\Utils\Rule::IS_CUSTOM => function ($value) {
                     return $value === 'Vitor';
                 },
-                \DotEnv\Utils\Rule::IS_LENGTH_VALUE => [ 10, 100 ] // min:10, max:100
+                \DotEnv\Utils\Rule::IS_RANGE_LENGTH => [ 10, 100 ] // [ 'min' => 10, 'max' => 100 ]
             ]
         ]
     ]);
