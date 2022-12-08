@@ -11,7 +11,9 @@ use DotEnv\Common\Debug;
 use DotEnv\Common\Converters;
 use DotEnv\Common\Parser;
 use DotEnv\Common\Rules;
+use DotEnv\Exception\Loader;
 use DotEnv\Exception\Runtime;
+use DotEnv\Exception\Syntax;
 
 /**
  * Class DotEnv
@@ -26,13 +28,14 @@ class DotEnv
     use Rules;
 
     /**
-     * @var string[] Memory Adaptor
+     * @var array Memory Adaptor
      */
-    private $memory = [];
+    private $memory;
 
     /**
      * Method for initialize Memory Adaptor
-     * @param string ...$paths .env paths
+     * @param  string ...$paths .env paths
+     * @throws Loader|Runtime|Syntax
      */
     public function __construct(...$paths)
     {

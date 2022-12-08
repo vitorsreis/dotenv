@@ -42,7 +42,7 @@ trait Parser
                 }
             }
 
-            if (!is_null($parse = $this->parse(file_get_contents($path, FILE_TEXT), realpath($path)))) {
+            if (!is_null($parse = $this->parse(file_get_contents($path), realpath($path)))) {
                 $result = array_merge($result, $parse);
                 $count++;
             }
@@ -66,17 +66,15 @@ trait Parser
      */
     public function parse($content, $path = null)
     {
-        # EMPTY CONTENT
         if (!$content) {
+            # EMPTY CONTENT
             return [];
         }
 
         # FIX BREAK LINE
         $content = str_replace([ '\r', "\r", '\n' ], [ "", "", "\n" ], $content);
 
-        # GET LINES
         $lines = explode("\n", $content);
-
         $lineno = 0;
         $result = [];
         do {
@@ -177,7 +175,7 @@ trait Parser
                 }
             }
 
-            # FILTRATE VALUE
+            # CONVERT VALUE
             $this->converter($key, $value);
 
             # INVALIDATE VALUE
