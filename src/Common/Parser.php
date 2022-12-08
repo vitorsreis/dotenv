@@ -9,6 +9,8 @@ namespace DotEnv\Common;
 use DotEnv\Exception\Loader;
 use DotEnv\Exception\Runtime;
 use DotEnv\Exception\Syntax;
+use DotEnv\Utils\Converter;
+use PHP_CodeSniffer\Tokenizers\PHP;
 
 /**
  * Trait Parser
@@ -194,5 +196,28 @@ trait Parser
         }
 
         return $result;
+    }
+
+    /**
+     * @param  array $scheme Scheme convert/rules
+     * @return void
+     * @throws Syntax|Runtime
+     */
+    public function scheme($scheme)
+    {
+        foreach ($scheme as $key => $scope) {
+            if (isset($scope['convert'])) {
+                if (is_string($scope['convert'])) {
+                    $this->convert($key)->setConverter($scope['convert']);
+                } elseif (is_callable($scope['convert'])) {
+                    $this->convert($key)->setConverter(Converter::TO_CUSTOM, $scope['convert']);
+                } else {
+                    throw new Syntax("Invalid convert in $key");
+                }
+            }
+            if (isset($scope['rules'])) {
+                $this->rule($key)->setRules($scope['rules']);
+            }
+        }
     }
 }

@@ -126,6 +126,40 @@ Validation usage example:
 
     $dotenv->load();
 
+## Convert / rules by scheme example:
+
+    $dotenv = new \DotEnv\DotEnv();
+    
+    $dotenv->scheme([
+        'IS_SUDO' => [
+            'convert' => \DotEnv\Utils\Converter::TO_BOOL_OR_NULL
+        ],
+
+        'IS_ADMIN' => [
+            'convert' => \DotEnv\Utils\Converter::TO_BOOL_OR_NULL,
+            'rules' => [ \DotEnv\Utils\Rule::IS_REQUIRED, \DotEnv\Utils\Rule::IS_BOOL ]
+        ],
+
+        'FACTOR' => [
+            'convert' => function ($value) => { // TO_CUSTOM
+                return intval($value) * 100;
+            },
+            'rules' => [
+                \DotEnv\Utils\Rule::IS_INT => true,
+                \DotEnv\Utils\Rule::IS_RANGE_VALUE => [ 'min' => 10, 'max' => 200 ]
+            ]
+        ]
+
+        'NAME' => [
+            'rules' => [
+                \DotEnv\Utils\Rule::IS_CUSTOM => function ($value) {
+                    return $value === 'Vitor';
+                },
+                \DotEnv\Utils\Rule::IS_LENGTH_VALUE => [ 10, 100 ] // min:10, max:100
+            ]
+        ]
+    ]);
+
 ## Debug mode
 
 Enable debug mode to receive all alerts (default: disabled)

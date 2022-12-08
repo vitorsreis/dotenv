@@ -1,7 +1,7 @@
 {
   "name": "vitorsreis/dotenv",
   "description": "PHP DotEnv - Simple library for load .env files in php runtime",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "type": "library",
   "license": "MIT",
   "homepage": "https://github.com/vitorsreis/dotenv",
