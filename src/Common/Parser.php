@@ -6,10 +6,13 @@
 
 namespace DotEnv\Common;
 
+use DotEnv\Converter;
+use DotEnv\DotEnv;
 use DotEnv\Exception\Loader;
 use DotEnv\Exception\Runtime;
 use DotEnv\Exception\Syntax;
-use DotEnv\Utils\Converter;
+use DotEnv\Rule;
+use DotEnv\Utils\IAdaptor;
 
 /**
  * Trait Parser
@@ -60,13 +63,17 @@ trait Parser
 
     /**
      * Method for parse .env content
-     * @param string         $content .env Content
+     * @param array|string   $content .env Content
      * @param string|null    $path    .env Path
      * @return string[]|null          If success "string[]", else "null"
      * @throws Loader|Runtime|Syntax
      */
     public function parse($content, $path = null)
     {
+        if (is_array($content)) {
+            $content = implode(PHP_EOL, $content);
+        }
+
         if (!$content) {
             # EMPTY CONTENT
             return [];
@@ -198,25 +205,103 @@ trait Parser
     }
 
     /**
-     * @param  array $scheme Scheme convert/rules
-     * @return void
+     * Method for set scheme convert/rules
+     * @param array $scheme Scheme convert/rules
+     * @return $this
      * @throws Syntax|Runtime
      */
     public function scheme($scheme)
     {
         foreach ($scheme as $key => $scope) {
-            if (isset($scope['convert'])) {
-                if (is_string($scope['convert'])) {
-                    $this->convert($key)->setConverter($scope['convert']);
-                } elseif (is_callable($scope['convert'])) {
-                    $this->convert($key)->setConverter(Converter::TO_CUSTOM, $scope['convert']);
+            $key = trim($key);
+
+            if (is_string($scope)) {
+                $scope = [ $scope ];
+            }
+
+            foreach ($scope as $scopeKey => $scopeValue) {
+                if (is_numeric($scopeKey)) {
+                    if (in_array($scopeValue, Rule::__constants()) || in_array($scopeValue, Converter::__constants())) {
+                        $scopeKey = $scopeValue;
+                        $scopeValue = true;
+                    }
+                }
+
+                if (substr($scopeKey, 0, 4) === 'Rule') {
+                    $this->rule($key)->setRule($scopeKey, $scopeValue);
+                } elseif (substr($scopeKey, 0, 7) === 'Convert') {
+                    $this->convert($key)->setConverter($scopeKey, $scopeValue);
                 } else {
-                    throw new Syntax("Invalid convert in $key");
+                    throw new Syntax("Invalid scheme type \"$scopeKey\" in \"$key\"");
                 }
             }
-            if (isset($scope['rules'])) {
-                $this->rule($key)->setRules($scope['rules']);
+        }
+        return $this;
+    }
+
+    /**
+     * Method for clear bootstrap DotEnv class
+     * @param array{
+     *     debug: bool,
+     *     adaptor:IAdaptor|IAdaptor[],
+     *     scheme:array,
+     *     load:string|string[],
+     *     parse:string|string[]
+     * } $setting Construct setting<pre>
+     * debug    Boolean, Optional
+     * adaptor  IAdaptor[], Optional
+     * scheme   [ ?...'ENV_KEY' => [ ?DotEnv\Converter::, ?...DotEnv\Rule::, ] ], Optional
+     * load     string|string[], Optional
+     * parse    string|string[], Optional</pre>
+     * @return $this
+     * @throws Loader|Runtime|Syntax
+     */
+    public static function bootstrap($setting)
+    {
+        $dotenv = new DotEnv();
+
+        if (isset($setting['debug'])) {
+            if ($setting['debug']) {
+                $dotenv::enableDebug();
+            } else {
+                $dotenv::disableDebug();
             }
         }
+
+        if (isset($setting['adaptor'])) {
+            if (is_string($setting['adaptor'])) {
+                $setting['adaptor'] = [ $setting['adaptor'] ];
+            }
+
+            if (is_array($setting['adaptor'])) {
+                foreach ($setting['adaptor'] as $key => $adaptor) {
+                    $dotenv->adaptor($adaptor, is_string($key) ? $key : null);
+                }
+            }
+        }
+
+        if (isset($setting['scheme'])) {
+            if (is_array($setting['scheme'])) {
+                $dotenv->scheme($setting['scheme']);
+            }
+        }
+
+        if (isset($setting['load'])) {
+            if (is_string($setting['load'])) {
+                $setting['load'] = [ $setting['load'] ];
+            }
+
+            if (is_array($setting['load'])) {
+                $dotenv->load(...$setting['load']);
+            }
+        }
+
+        if (isset($setting['parse'])) {
+            if (is_string($setting['parse']) || is_array($setting['parse'])) {
+                $dotenv->parse($setting['parse']);
+            }
+        }
+
+        return $dotenv;
     }
 }

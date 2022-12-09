@@ -6,8 +6,9 @@
 
 namespace DotEnv\Common;
 
+use DotEnv\Converter;
 use DotEnv\Exception\Loader;
-use DotEnv\Utils\Converter;
+use DotEnv\Utils\ConverterSetter;
 
 /**
  * Trait Converters
@@ -23,20 +24,32 @@ trait Converters
     /**
      * Method for add env key convert
      * @param  string ...$keys Env Keys
-     * @return Converter
+     * @return ConverterSetter
      */
     public function convert(...$keys)
     {
-        $converter = new Converter();
+        $parents = [];
+
         foreach ($keys as $key) {
-            if (isset($this->converters[$key])) {
-                unset($this->converters[$key]);
+            if (!isset($this->converters[$key])) {
+                $this->converters[$key] = new Converter();
             }
 
-            $this->converters[$key] = &$converter;
+            $parents[] = &$this->converters[$key];
         }
 
-        return $converter;
+        return new ConverterSetter($parents);
+    }
+
+    /**
+     * Method for get converters
+     * @return string[]
+     */
+    public function getConverters()
+    {
+        return array_map(function ($converter) {
+            return $converter->getConverter();
+        }, $this->converters);
     }
 
     /**

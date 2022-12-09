@@ -4,66 +4,85 @@
  * @author Vitor Reis <vitor@d5w.com.br>
  */
 
-namespace DotEnv\Utils;
+namespace DotEnv;
 
-use DotEnv\DotEnv;
 use DotEnv\Exception\Runtime;
+use DotEnv\Utils\IConverter;
+use ReflectionClass;
 
 /**
  * class Converter
  * @package DotEnv\Utils
  */
-class Converter
+class Converter implements IConverter
 {
     /**
      * @var string Scope &lt;callable&gt;
      */
-    const TO_CUSTOM         = 'toCustom';
+    const TO_CUSTOM         = 'Convert:toCustom';
 
     /**
      * @var string Scope TO_STRING
      */
-    const TO_STRING         = 'toString';
+    const TO_STRING         = 'Convert:toString';
 
     /**
      * @var string Scope TO_STRING_OR_NULL
      */
-    const TO_STRING_OR_NULL = 'toStringOrNull';
+    const TO_STRING_OR_NULL = 'Convert:toStringOrNull';
 
     /**
      * @var string Scope TO_BOOL
      */
-    const TO_BOOL           = 'toBool';
+    const TO_BOOL           = 'Convert:toBool';
 
     /**
      * @var string Scope TO_BOOL_OR_NULL
      */
-    const TO_BOOL_OR_NULL   = 'toBoolOrNull';
+    const TO_BOOL_OR_NULL   = 'Convert:toBoolOrNull';
 
     /**
      * @var string Scope TO_INT
      */
-    const TO_INT            = 'toInt';
+    const TO_INT            = 'Convert:toInt';
 
     /**
      * @var string Scope TO_INT_OR_NULL
      */
-    const TO_INT_OR_NULL    = 'toIntOrNull';
+    const TO_INT_OR_NULL    = 'Convert:toIntOrNull';
 
     /**
      * @var string Scope TO_FLOAT
      */
-    const TO_FLOAT          = 'toFloat';
+    const TO_FLOAT          = 'Convert:toFloat';
 
     /**
      * @var string Scope TO_FLOAT_OR_NULL
      */
-    const TO_FLOAT_OR_NULL  = 'toFloatOrNull';
+    const TO_FLOAT_OR_NULL  = 'Convert:toFloatOrNull';
+
+    /**
+     * @var array|null Class Constants
+     */
+    private static $reflectionConstants = null;
 
     /**
      * @var array{0:string,1:callable|string} $converter
      */
     private $converter = null;
+
+    /**
+     * Method for get class constants
+     * @return string[]
+     */
+    public static function __constants()
+    {
+        # MEMORY PREVENT
+        if (is_null(static::$reflectionConstants)) {
+            static::$reflectionConstants = (new ReflectionClass(__CLASS__))->getConstants();
+        }
+        return static::$reflectionConstants;
+    }
 
     /**
      * Method for get convert
@@ -112,11 +131,12 @@ class Converter
 
     /**
      * Method for clear converter
-     * @return void
+     * @return $this
      */
     public function clearConverter()
     {
         $this->converter = null;
+        return $this;
     }
 
     /**

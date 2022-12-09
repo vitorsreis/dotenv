@@ -6,7 +6,8 @@
 
 namespace DotEnv\Common;
 
-use DotEnv\Utils\Rule;
+use DotEnv\Rule;
+use DotEnv\Utils\RuleSetter;
 
 /**
  * Trait Rules
@@ -21,21 +22,33 @@ trait Rules
 
     /**
      * Method for add env key rule
-     * @param string      ...$keys Env Keys
-     * @return Rule
+     * @param  string     ...$keys Env Keys
+     * @return RuleSetter
      */
     public function rule(...$keys)
     {
-        $rules = new Rule();
+        $parents = [];
+
         foreach ($keys as $key) {
-            if (isset($this->rules[$key])) {
-                unset($this->rules[$key]);
+            if (!isset($this->rules[$key])) {
+                $this->rules[$key] = new Rule();
             }
 
-            $this->rules[$key] = &$rules;
+            $parents[] = &$this->rules[$key];
         }
 
-        return $rules;
+        return new RuleSetter($parents);
+    }
+
+    /**
+     * Method for get rules
+     * @return Rule[]
+     */
+    public function getRules()
+    {
+        return array_map(function ($rule) {
+            return $rule->getRules();
+        }, $this->rules);
     }
 
     /**

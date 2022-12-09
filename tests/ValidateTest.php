@@ -635,4 +635,104 @@ class ValidateTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    /**
+     * @testdox Validate: Create by bootstrap with adaptor index
+     */
+    public function testBootstrapAdaptor()
+    {
+        $adaptor = [
+            'ApacheGetEnv'   => new \DotEnv\Adaptor\ApacheGetEnv(),
+            'EnvSuperGlobal' => new \DotEnv\Adaptor\EnvSuperGlobal()
+        ];
+
+        $dotenv = DotEnv::bootstrap([
+            'adaptor' => $adaptor
+        ]);
+
+        $this->assertEquals(
+            $adaptor,
+            $dotenv->getAdaptors()
+        );
+    }
+
+    /**
+     * @testdox Validate: Create by bootstrap with scheme index with rule
+     */
+    public function testBootstrapSchemeRule()
+    {
+        $dotenv = DotEnv::bootstrap([
+            'scheme' => [
+                'KEY1' => \DotEnv\Rule::IS_REQUIRED,
+                'KEY2' => [\DotEnv\Rule::IS_RANGE_VALUE => [1, 9]],
+            ]
+        ]);
+
+        $this->assertEquals(
+            [
+                'KEY1' => [
+                    \DotEnv\Rule::IS_REQUIRED => true
+                ],
+                'KEY2' => [
+                    \DotEnv\Rule::IS_MIN_VALUE => 1,
+                    \DotEnv\Rule::IS_MAX_VALUE => 9,
+                ]
+            ],
+            $dotenv->getRules()
+        );
+    }
+
+    /**
+     * @testdox Validate: Create by bootstrap with scheme index with converter
+     */
+    public function testBootstrapSchemeConverter()
+    {
+        $dotenv = DotEnv::bootstrap([
+            'scheme' => [
+                'KEY1' => \DotEnv\Converter::TO_INT,
+                'KEY2' => [ \DotEnv\Converter::TO_BOOL ],
+            ]
+        ]);
+
+        $this->assertEquals(
+            [
+                'KEY1' => [ \DotEnv\Converter::TO_INT ],
+                'KEY2' => [ \DotEnv\Converter::TO_BOOL ],
+            ],
+            $dotenv->getConverters()
+        );
+    }
+
+    /**
+     * @testdox Validate: Create by bootstrap with parse index as string
+     */
+    public function testBootstrapParseString()
+    {
+        $dotenv = DotEnv::bootstrap([
+            'parse'   => "KEY1=AAA \n KEY2=BBB"
+        ]);
+
+        $this->assertEquals(
+            [ 'KEY1' => 'AAA', 'KEY2' => 'BBB' ],
+            $dotenv->all()
+        );
+    }
+
+    /**
+     * @testdox Validate: Create by bootstrap with parse index as array
+     */
+    public function testBootstrapParseArray()
+    {
+        $dotenv = DotEnv::bootstrap([
+            'parse'   => [
+                'KEY1=AAA',
+                'KEY2=BBB'
+            ]
+        ]);
+
+        $this->assertEquals(
+            [ 'KEY1' => 'AAA', 'KEY2' => 'BBB' ],
+            $dotenv->all()
+        );
+    }
 }

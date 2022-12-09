@@ -4,148 +4,147 @@
  * @author Vitor Reis <vitor@d5w.com.br>
  */
 
-namespace DotEnv\Utils;
+namespace DotEnv;
 
-use DotEnv\DotEnv;
 use DotEnv\Exception\Runtime;
-use phpDocumentor\Reflection\Types\Boolean;
+use DotEnv\Utils\IRule;
 use ReflectionClass;
 
 /**
  * class Rule
  * @package DotEnv\Utils
  */
-class Rule
+class Rule implements IRule
 {
     /**
      * @var string Scope IS_REQUIRED:bool
      */
-    const IS_REQUIRED     = 'isRequired';
+    const IS_REQUIRED     = 'Rule:isRequired';
 
     /**
      * @var string Scope IS_CUSTOM:callable|callable[]
      */
-    const IS_CUSTOM       = 'isCustom';
+    const IS_CUSTOM       = 'Rule:isCustom';
 
     /**
      * @var string Scope IS_REGEX:string|null
      */
-    const IS_REGEX        = 'isRegex';
+    const IS_REGEX        = 'Rule:isRegex';
 
     /**
      * @var string Scope IS_NOT_ALLOW:bool
      */
-    const IS_NOT_ALLOW    = 'isNotAllow';
+    const IS_NOT_ALLOW    = 'Rule:isNotAllow';
 
     /**
      * @var string Scope IS_BOOL:bool
      */
-    const IS_BOOL         = 'isBool';
+    const IS_BOOL         = 'Rule:isBool';
 
     /**
      * @var string Scope IS_INT:bool
      */
-    const IS_INT          = 'isInt';
+    const IS_INT          = 'Rule:isInt';
 
     /**
      * @var string Scope IS_FLOAT:bool
      */
-    const IS_FLOAT        = 'isFloat';
+    const IS_FLOAT        = 'Rule:isFloat';
 
     /**
      * @var string Scope IS_MIN_LENGTH:int|float|null
      */
-    const IS_MIN_VALUE    = 'isMinValue';
+    const IS_MIN_VALUE    = 'Rule:isMinValue';
 
     /**
      * @var string Scope IS_MAX_VALUE:int|float|null
      */
-    const IS_MAX_VALUE    = 'isMaxValue';
+    const IS_MAX_VALUE    = 'Rule:isMaxValue';
 
     /**
      * @var string Scope IS_RANGE_VALUE:array{ 0|min:int|float|null, 1|max:int|float|null }
      */
-    const IS_RANGE_VALUE  = 'isRangeValue';
+    const IS_RANGE_VALUE  = 'Rule:isRangeValue';
 
     /**
      * @var string Scope IS_STRING:bool
      */
-    const IS_STRING       = 'isString';
+    const IS_STRING       = 'Rule:isString';
 
     /**
      * @var string Scope IS_MIN_LENGTH:int|float|null
      */
-    const IS_MIN_LENGTH   = 'isMinLength';
+    const IS_MIN_LENGTH   = 'Rule:isMinLength';
 
     /**
      * @var string Scope IS_MAX_LENGTH:int|float|null
      */
-    const IS_MAX_LENGTH   = 'isMaxLength';
+    const IS_MAX_LENGTH   = 'Rule:isMaxLength';
 
     /**
      * @var string Scope IS_RANGE_LENGTH:array{ 0|min:int|float|null, 1|max:int|float|null }
      */
-    const IS_RANGE_LENGTH = 'isRangeLength';
+    const IS_RANGE_LENGTH = 'Rule:isRangeLength';
 
     /**
      * @var string Scope IS_EMPTY:bool
      */
-    const IS_EMPTY        = 'isEmpty';
+    const IS_EMPTY        = 'Rule:isEmpty';
 
     /**
      * @var string Scope IS_NOT_EMPTY:bool
      */
-    const IS_NOT_EMPTY    = 'isNotEmpty';
+    const IS_NOT_EMPTY    = 'Rule:isNotEmpty';
 
     /**
      * @var string Scope IS_NULL:bool
      */
-    const IS_NULL         = 'isNull';
+    const IS_NULL         = 'Rule:isNull';
 
     /**
      * @var string Scope IS_NOT_NULL:bool
      */
-    const IS_NOT_NULL     = 'isNotNull';
+    const IS_NOT_NULL     = 'Rule:isNotNull';
 
     /**
      * @var string Scope IS_EMAIL:bool
      */
-    const IS_EMAIL        = 'isEmail';
+    const IS_EMAIL        = 'Rule:isEmail';
 
     /**
      * @var string Scope IS_IP:bool
      */
-    const IS_IP           = 'isIp';
+    const IS_IP           = 'Rule:isIp';
 
     /**
      * @var string Scope IS_IPV4:bool
      */
-    const IS_IPV4         = 'isIpv4';
+    const IS_IPV4         = 'Rule:isIpv4';
 
     /**
      * @var string Scope IS_IPV6:bool
      */
-    const IS_IPV6         = 'isIpv6';
+    const IS_IPV6         = 'Rule:isIpv6';
 
     /**
      * @var string Scope IS_MAC:bool
      */
-    const IS_MAC          = 'isMac';
+    const IS_MAC          = 'Rule:isMac';
 
     /**
      * @var string Scope IS_URL:bool
      */
-    const IS_URL          = 'isUrl';
+    const IS_URL          = 'Rule:isUrl';
+
+    /**
+     * @var array|null Class Constants
+     */
+    private static $reflectionConstants = null;
 
     /**
      * @var array Rules
      */
     private $rules;
-
-    /**
-     * @var array|null
-     */
-    private static $reflectionConstants = null;
 
     /**
      * @param  array $rules Rules
@@ -154,6 +153,20 @@ class Rule
     public function __construct($rules = [])
     {
         $this->setRules($rules);
+    }
+
+    /**
+     * Method for get class constants
+     * @return string[]
+     */
+    public static function __constants()
+    {
+        # MEMORY PREVENT
+        if (is_null(static::$reflectionConstants)) {
+            static::$reflectionConstants = (new ReflectionClass(__CLASS__))->getConstants();
+        }
+
+        return static::$reflectionConstants;
     }
 
     /**
@@ -168,6 +181,98 @@ class Rule
     }
 
     /**
+     * Method for set rule
+     * @param  string $rule Rule Key
+     * @param  mixed  $value Rule Value
+     * @return $this
+     * @throws Runtime
+     */
+    public function setRule($rule, $value = null)
+    {
+        # BOOL RULES ONLY RULE ARG
+        if (func_num_args() === 1) {
+            $value = true;
+        }
+
+        switch ($rule) {
+            case static::IS_CUSTOM:
+                if (!isset($this->rules[$rule])) {
+                    $this->rules[$rule] = [];
+                }
+                foreach (is_array($value) ? $value : [ $value ] as $i) {
+                    if (is_callable($i)) {
+                        $this->rules[$rule][] = $i;
+                    }
+                }
+                break;
+
+            case static::IS_REGEX:
+                if (!isset($this->rules[$rule])) {
+                    $this->rules[$rule] = [];
+                }
+                $this->rules[$rule][] = is_string($value) ? $value : null;
+                break;
+
+            case static::IS_RANGE_VALUE:
+                if (isset($value['min']) || isset($value['max'])) {
+                    $this->rules[static::IS_MIN_VALUE] = isset($value['min']) ? $value['min'] : null;
+                    $this->rules[static::IS_MAX_VALUE] = isset($value['max']) ? $value['max'] : null;
+                } else {
+                    $this->rules[static::IS_MIN_VALUE] = isset($value[0]) ? $value[0] : null;
+                    $this->rules[static::IS_MAX_VALUE] = isset($value[1]) ? $value[1] : null;
+                }
+                break;
+
+            case static::IS_MIN_VALUE:
+            case static::IS_MAX_VALUE:
+                $this->rules[$rule] = is_numeric($value) ? $value : null;
+                break;
+
+            case static::IS_RANGE_LENGTH:
+                if (isset($value['min']) || isset($value['max'])) {
+                    $this->rules[static::IS_MIN_LENGTH] = isset($value['min']) ? $value['min'] : null;
+                    $this->rules[static::IS_MAX_LENGTH] = isset($value['max']) ? $value['max'] : null;
+                } else {
+                    $this->rules[static::IS_MIN_LENGTH] = isset($value[0]) ? $value[0] : null;
+                    $this->rules[static::IS_MAX_LENGTH] = isset($value[1]) ? $value[1] : null;
+                }
+                break;
+
+            case static::IS_MIN_LENGTH:
+            case static::IS_MAX_LENGTH:
+                $this->rules[$rule] = is_int($value) ? $value : null;
+                break;
+
+            case static::IS_REQUIRED:
+            case static::IS_NOT_ALLOW:
+            case static::IS_BOOL:
+            case static::IS_INT:
+            case static::IS_FLOAT:
+            case static::IS_STRING:
+            case static::IS_EMPTY:
+            case static::IS_NOT_EMPTY:
+            case static::IS_NULL:
+            case static::IS_NOT_NULL:
+            case static::IS_EMAIL:
+            case static::IS_IP:
+            case static::IS_IPV4:
+            case static::IS_IPV6:
+            case static::IS_MAC:
+            case static::IS_URL:
+                $this->rules[$rule] = (bool)$value;
+                break;
+
+            default:
+                if (DotEnv::isDebug()) {
+                    throw new Runtime("Rule \"$rule\" not implemented!");
+                }
+                break;
+        }
+
+        return $this;
+    }
+
+    /**
      * Method for set rules
      * @param  array $rules Rules
      * @return $this
@@ -179,12 +284,7 @@ class Rule
             foreach ($rules as $rule => $value) {
                 # NOT DEFINED VALUE
                 if (is_numeric($rule)) {
-                    # MEMORY PREVENT
-                    if (is_null(static::$reflectionConstants)) {
-                        static::$reflectionConstants = (new ReflectionClass($this))->getConstants();
-                    }
-
-                    if (in_array($value, static::$reflectionConstants)) {
+                    if (in_array($value, $this->__constants())) {
                         $rule = $value;
                         $value = true;
                     } elseif (is_string($value)) {
@@ -192,80 +292,7 @@ class Rule
                     }
                 }
 
-                switch ($rule) {
-                    case static::IS_CUSTOM:
-                        if (!isset($this->rules[$rule])) {
-                            $this->rules[$rule] = [];
-                        }
-                        foreach (is_array($value) ? $value : [ $value ] as $i) {
-                            if (is_callable($i)) {
-                                $this->rules[$rule][] = $i;
-                            }
-                        }
-                        break;
-
-                    case static::IS_REGEX:
-                        if (!isset($this->rules[$rule])) {
-                            $this->rules[$rule] = [];
-                        }
-                        $this->rules[$rule][] = is_string($value) ? $value : null;
-                        break;
-
-                    case static::IS_RANGE_VALUE:
-                        if (isset($value['min']) || isset($value['max'])) {
-                            $this->rules[static::IS_MIN_VALUE] = isset($value['min']) ? $value['min'] : null;
-                            $this->rules[static::IS_MAX_VALUE] = isset($value['max']) ? $value['max'] : null;
-                        } else {
-                            $this->rules[static::IS_MIN_VALUE] = isset($value[0]) ? $value[0] : null;
-                            $this->rules[static::IS_MAX_VALUE] = isset($value[1]) ? $value[1] : null;
-                        }
-                        break;
-
-                    case static::IS_MIN_VALUE:
-                    case static::IS_MAX_VALUE:
-                        $this->rules[$rule] = is_numeric($value) ? $value : null;
-                        break;
-
-                    case static::IS_RANGE_LENGTH:
-                        if (isset($value['min']) || isset($value['max'])) {
-                            $this->rules[static::IS_MIN_LENGTH] = isset($value['min']) ? $value['min'] : null;
-                            $this->rules[static::IS_MAX_LENGTH] = isset($value['max']) ? $value['max'] : null;
-                        } else {
-                            $this->rules[static::IS_MIN_LENGTH] = isset($value[0]) ? $value[0] : null;
-                            $this->rules[static::IS_MAX_LENGTH] = isset($value[1]) ? $value[1] : null;
-                        }
-                        break;
-
-                    case static::IS_MIN_LENGTH:
-                    case static::IS_MAX_LENGTH:
-                        $this->rules[$rule] = is_int($value) ? $value : null;
-                        break;
-
-                    case static::IS_REQUIRED:
-                    case static::IS_NOT_ALLOW:
-                    case static::IS_BOOL:
-                    case static::IS_INT:
-                    case static::IS_FLOAT:
-                    case static::IS_STRING:
-                    case static::IS_EMPTY:
-                    case static::IS_NOT_EMPTY:
-                    case static::IS_NULL:
-                    case static::IS_NOT_NULL:
-                    case static::IS_EMAIL:
-                    case static::IS_IP:
-                    case static::IS_IPV4:
-                    case static::IS_IPV6:
-                    case static::IS_MAC:
-                    case static::IS_URL:
-                        $this->rules[$rule] = (bool)$value;
-                        break;
-
-                    default:
-                        if (DotEnv::isDebug()) {
-                            throw new Runtime("Rule \"$rule\" not implemented!");
-                        }
-                        break;
-                }
+                $this->setRule($rule, $value);
             }
         } else {
             $this->rules = [];

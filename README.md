@@ -18,6 +18,46 @@ Simple library for load .env files in php runtime
 ###### Example 4: for load with string
     ($dotenv = new \DotEnv\DotEnv())->parse(" USER=vitor \n NAME='Vitor Reis' \n TYPE=ADMIN ");
 
+###### Example 5: for load with static bootstrap
+    $dotenv = \DotEnv\DotEnv::bootstrap([
+        /*
+        [OPTIONAL] 'debug'   => bool,
+        [OPTIONAL] 'adaptor' => IAdaptor|IAdaptor[],
+        [OPTIONAL] 'scheme'  => array[ ...'ENV_KEY' => ...Convert/Rules ],
+        [OPTIONAL] 'load'    => string|string[],
+        [OPTIONAL] 'parse'   => string|string[]
+        */
+
+        'debug'   => true,
+        'adaptor' => [
+            new \DotEnv\Adaptor\ApacheGetEnv(),
+            new \DotEnv\Adaptor\EnvSuperGlobal()
+        ],
+        'scheme'  => [
+            'IS_SUDO'  => \DotEnv\Rule::IS_REQUIRED,
+            'IS_ADMIN' => \DotEnv\Converter::TO_BOOL_OR_NULL,
+            'FACTOR'   => [
+                \DotEnv\Rule::IS_INT,
+                \DotEnv\Rule::IS_MIN_VALUE => 10,
+                \DotEnv\Rule::IS_MAX_VALUE => 200,
+                \DotEnv\Converter::TO_CUSTOM => function ($value) => {
+                    return intval($value) * 10;
+                }
+            ],
+            'NAME'     => [
+                \DotEnv\Rule::IS_RANGE_LENGTH => [ 10, 100 ], // or [ 'min' => 10, 'max' => 100 ]
+                \DotEnv\Rule::IS_CUSTOM => function ($value) {
+                    return $value === 'Vitor';
+                }
+            ]
+        ],
+        'load'   => __DIR__ . ".env" // or [ "./.env", "./.env.global" ],
+        'parse'  => [
+            'CUSTOM_ENV_VARIABLE_1=VALUE_1',
+            'CUSTOM_ENV_VARIABLE_2=VALUE_2'
+        ]
+    ]);
+
 ## Syntax supports
 | Support | Name                             | Example                                         |
 |:-------:|----------------------------------|-------------------------------------------------|
@@ -131,36 +171,24 @@ Validation usage example:
     $dotenv = new \DotEnv\DotEnv();
     
     $dotenv->scheme([
-        'IS_SUDO' => [
-            'convert' => \DotEnv\Utils\Converter::TO_BOOL
-        ],
+        'IS_SUDO' => \DotEnv\Converter::TO_BOOL,
 
-        'IS_ADMIN' => [
-            'convert' => \DotEnv\Utils\Converter::TO_BOOL_OR_NULL,
-            'rules' => [
-                \DotEnv\Utils\Rule::IS_REQUIRED,
-                \DotEnv\Utils\Rule::IS_BOOL
-            ]
-        ],
+        'IS_ADMIN' => \DotEnv\Converter::TO_BOOL_OR_NULL,
 
         'FACTOR' => [
-            'convert' => function ($value) => { // <callable> for TO_CUSTOM
-                return intval($value) * 100;
+            \DotEnv\Converter::TO_CUSTOM => function ($value) => {
+                return intval($value) * 10;
             },
-            'rules' => [
-                \DotEnv\Utils\Rule::IS_INT,
-                \DotEnv\Utils\Rule::IS_MIN_VALUE => 10,
-                \DotEnv\Utils\Rule::IS_MAX_VALUE => 200,
-            ]
+            \DotEnv\Rule::IS_INT,
+            \DotEnv\Rule::IS_MIN_VALUE => 10,
+            \DotEnv\Rule::IS_MAX_VALUE => 200,
         ]
 
         'NAME' => [
-            'rules' => [
-                \DotEnv\Utils\Rule::IS_CUSTOM => function ($value) {
-                    return $value === 'Vitor';
-                },
-                \DotEnv\Utils\Rule::IS_RANGE_LENGTH => [ 10, 100 ] // [ 'min' => 10, 'max' => 100 ]
-            ]
+            \DotEnv\Rule::IS_CUSTOM => function ($value) {
+                return $value === 'Vitor';
+            },
+            \DotEnv\Rule::IS_RANGE_LENGTH => [ 10, 100 ] // or [ 'min' => 10, 'max' => 100 ]
         ]
     ]);
 
