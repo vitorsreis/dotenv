@@ -109,17 +109,17 @@ $dotenv->removeAdaptor('adaptor-global-env');
 
 ## Variables convert support
 
-| Support | Key            | Description                                                     |
-|:-------:|----------------|-----------------------------------------------------------------|
-|    ✅    | toCustom       | Custom callable convert : _function ($value) { return mixed; }_ |
-|    ✅    | toString       | Convert variable as string                                      |
-|    ✅    | toStringOrNull | Convert variable as string or null                              |
-|    ✅    | toBool         | Convert variable as bool                                        |
-|    ✅    | toBoolOrNull   | Convert variable as bool or null                                |
-|    ✅    | toInt          | Convert variable as int                                         |
-|    ✅    | toIntOrNull    | Convert variable as int or null                                 |
-|    ✅    | toFloat        | Convert variable as float                                       |
-|    ✅    | toFloatOrNull  | Convert variable as float or null                               |
+| Support | Constant                             | Function         | Description                                                     |
+|:-------:|:-------------------------------------|:-----------------|:----------------------------------------------------------------|
+|    ✅    | \DotEnv\Converter::TO_CUSTOM         | toCustom()       | Custom callable convert : _function ($value) { return mixed; }_ |
+|    ✅    | \DotEnv\Converter::TO_STRING         | toString()       | Convert variable as string                                      |
+|    ✅    | \DotEnv\Converter::TO_STRING_OR_NULL | toStringOrNull() | Convert variable as string or null                              |
+|    ✅    | \DotEnv\Converter::TO_BOOL           | toBool()         | Convert variable as bool                                        |
+|    ✅    | \DotEnv\Converter::TO_BOOL_OR_NULL   | toBoolOrNull()   | Convert variable as bool or null                                |
+|    ✅    | \DotEnv\Converter::TO_INT            | toInt()          | Convert variable as int                                         |
+|    ✅    | \DotEnv\Converter::TO_INT_OR_NULL    | toIntOrNull()    | Convert variable as int or null                                 |
+|    ✅    | \DotEnv\Converter::TO_FLOAT          | toFloat()        | Convert variable as float                                       |
+|    ✅    | \DotEnv\Converter::TO_FLOAT_OR_NULL  | toFloatOrNull()  | Convert variable as float or null                               |
 
 Converter usage example:
 ```php
@@ -133,32 +133,32 @@ $dotenv->load();
 
 ## Variables rule support
 
-| Support | Key           | Description                                                  |
-|:-------:|---------------|--------------------------------------------------------------|
-|    ✅    | isCustom      | Custom callable rule  : _function ($value) { return bool; }_ |
-|    ✅    | isRegex       | Regex rule                                                   |
-|    ✅    | isRequired    | Required env key                                             |
-|    ✅    | isNotAllow    | Not allow env key                                            |
-|    ✅    | isBool        | Check if value is boolean                                    |
-|    ✅    | isInt         | Check if value is integer                                    |
-|    ✅    | isFloat       | Check if value is float                                      |
-|    ✅    | isMinValue    | Check if value numeric is min                                |
-|    ✅    | isMaxValue    | Check if value numeric is max                                |
-|    ✅    | isRangeValue  | Check if value numeric is in range                           |
-|    ✅    | isString      | Check if value is string                                     |
-|    ✅    | isMinLength   | Check if value string has min length                         |
-|    ✅    | isMaxLength   | Check if value string has max length                         |
-|    ✅    | isRangeLength | Check if value string has range length                       |
-|    ✅    | isEmpty       | Check if value is empty                                      |
-|    ✅    | isNotEmpty    | Check if value is not empty                                  |
-|    ✅    | isNull        | Check if value is null                                       |
-|    ✅    | isNotNull     | Check if value is not null                                   |
-|    ✅    | isEmail       | Check if value is e-mail                                     |
-|    ✅    | isIp          | Check if value is IP Address                                 |
-|    ✅    | isIpv4        | Check if value is IPv4 Address                               |
-|    ✅    | isIpv6        | Check if value is IPv6 Address                               |
-|    ✅    | isMac         | Check if value is MAC Address                                |
-|    ✅    | isUrl         | Check if value is URL String                                 |
+| Support | Constant                                                                                                             | Function                  | Description                            |
+|:-------:|:---------------------------------------------------------------------------------------------------------------------|:--------------------------|:---------------------------------------|
+|    ✅    | \DotEnv\Rule::IS_CUSTOM => _?callable : function ($value) { return bool; } or null_                                  | isCustom(?callable)       | Custom callable rule                   |
+|    ✅    | \DotEnv\Rule::IS_REGEX => _?string_                                                                                  | isRegex(?string)          | Regex rule                             |
+|    ✅    | \DotEnv\Rule::IS_REQUIRED =>  _bool, if implicit = true_                                                             | isRequired(bool=true)     | Required env key                       |
+|    ✅    | \DotEnv\Rule::IS_NOT_ALLOW =>  _bool, if implicit = true_                                                            | isNotAllow(bool=true)     | Not allow env key                      |
+|    ✅    | \DotEnv\Rule::IS_BOOL =>  _bool, if implicit = true_                                                                 | isBool(bool=true)         | Check if value is boolean              |
+|    ✅    | \DotEnv\Rule::IS_INT =>  _bool, if implicit = true_                                                                  | isInt(bool=true)          | Check if value is integer              |
+|    ✅    | \DotEnv\Rule::IS_FLOAT =>  _bool, if implicit = true_                                                                | isFloat(bool=true)        | Check if value is float                |
+|    ✅    | \DotEnv\Rule::IS_MIN_VALUE =>  _?numeric_                                                                            | isMinValue(?numeric)      | Check if value numeric is min          |
+|    ✅    | \DotEnv\Rule::IS_MAX_VALUE =>  _?numeric_                                                                            | isMaxValue(?numeric)      | Check if value numeric is max          |
+|    ✅    | \DotEnv\Rule::IS_RANGE_VALUE => \[ _?numeric_, _?numeric_ ] or \[ 'min' => _?numeric_, 'max' => _?numeric_ ] or null | isRangeValue(?int, ?int)  | Check if value numeric is in range     |
+|    ✅    | \DotEnv\Rule::IS_STRING =>  _bool, if implicit = true_                                                               | isString(bool=true)       | Check if value is string               |
+|    ✅    | \DotEnv\Rule::IS_MIN_LENGTH =>  _?int_                                                                               | isMinLength(?int)         | heck if value string has min length    |
+|    ✅    | \DotEnv\Rule::IS_MAX_LENGTH =>  _?in_                                                                                | isMaxLength(?int)         | Check if value string has max length   |
+|    ✅    | \DotEnv\Rule::IS_RANGE_LENGTH  => \[ _?int_, _?int_ ] or \[ 'min' => _?int_, 'max' => _?int_ ] or null               | isRangeLength(?int, ?int) | Check if value string has range length |
+|    ✅    | \DotEnv\Rule::IS_EMPTY =>  _bool, if implicit = true_                                                                | isEmpty(bool=true)        | Check if value is empty                |
+|    ✅    | \DotEnv\Rule::IS_NOT_EMPTY =>  _bool, if implicit = true_                                                            | isNotEmpty(bool=true)     | Check if value is not empty            |
+|    ✅    | \DotEnv\Rule::IS_NULL =>  _bool, if implicit = true_                                                                 | isNull(bool=true)         | Check if value is null                 |
+|    ✅    | \DotEnv\Rule::IS_NOT_NULL =>  _bool, if implicit = true_                                                             | isNotNull(bool=true)      | Check if value is not null             |
+|    ✅    | \DotEnv\Rule::IS_EMAIL =>  _bool, if implicit = true_                                                                | isEmail(bool=true)        | Check if value is e-mail               |
+|    ✅    | \DotEnv\Rule::IS_IP =>  _bool, if implicit = true_                                                                   | isIp(bool=true)           | Check if value is IP Address           |
+|    ✅    | \DotEnv\Rule::IS_IPV4 =>  _bool, if implicit = true_                                                                 | isIpv4(bool=true)         | Check if value is IPv4 Address         |
+|    ✅    | \DotEnv\Rule::IS_IPV6 =>  _bool, if implicit = true_                                                                 | isIpv6(bool=true)         | Check if value is IPv6 Address         |
+|    ✅    | \DotEnv\Rule::IS_MAC =>  _bool, if implicit = true_                                                                  | isMac(bool=true)          | Check if value is MAC Address          |
+|    ✅    | \DotEnv\Rule::IS_URL =>  _bool, if implicit = true_                                                                  | isUrl(bool=true)          | Check if value is URL String           |
 
 Validation usage example:
 ```php
