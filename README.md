@@ -183,6 +183,7 @@ $dotenv = new \DotEnv\DotEnv();
 
 $dotenv->scheme([
     'IS_SUDO' => \DotEnv\Converter::TO_BOOL,
+
     'IS_ADMIN' => \DotEnv\Converter::TO_BOOL_OR_NULL,
 
     'FACTOR' => [
@@ -208,5 +209,6 @@ $dotenv->scheme([
 Enable debug mode to receive all alerts (default: disabled)
 ```php
 \DotEnv\DotEnv::enableDebug();
+
 $dotenv = new \DotEnv\DotEnv();
 ```
