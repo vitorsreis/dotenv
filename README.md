@@ -147,7 +147,7 @@ $dotenv->load();
 |    ✅    | \DotEnv\Rule::IS_RANGE_VALUE => \[ _?numeric_, _?numeric_ ] or \[ 'min' => _?numeric_, 'max' => _?numeric_ ] or null | isRangeValue(?int, ?int)  | Check if value numeric is in range     |
 |    ✅    | \DotEnv\Rule::IS_STRING =>  _bool, if implicit = true_                                                               | isString(bool=true)       | Check if value is string               |
 |    ✅    | \DotEnv\Rule::IS_MIN_LENGTH =>  _?int_                                                                               | isMinLength(?int)         | heck if value string has min length    |
-|    ✅    | \DotEnv\Rule::IS_MAX_LENGTH =>  _?in_                                                                                | isMaxLength(?int)         | Check if value string has max length   |
+|    ✅    | \DotEnv\Rule::IS_MAX_LENGTH =>  _?int_                                                                               | isMaxLength(?int)         | Check if value string has max length   |
 |    ✅    | \DotEnv\Rule::IS_RANGE_LENGTH  => \[ _?int_, _?int_ ] or \[ 'min' => _?int_, 'max' => _?int_ ] or null               | isRangeLength(?int, ?int) | Check if value string has range length |
 |    ✅    | \DotEnv\Rule::IS_EMPTY =>  _bool, if implicit = true_                                                                | isEmpty(bool=true)        | Check if value is empty                |
 |    ✅    | \DotEnv\Rule::IS_NOT_EMPTY =>  _bool, if implicit = true_                                                            | isNotEmpty(bool=true)     | Check if value is not empty            |
