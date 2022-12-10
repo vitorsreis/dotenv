@@ -13,6 +13,7 @@ use DotEnv\Exception\Runtime;
 use DotEnv\Exception\Syntax;
 use DotEnv\Rule;
 use DotEnv\Utils\IAdaptor;
+use PHP_CodeSniffer\Tokenizers\PHP;
 
 /**
  * Trait Parser
@@ -70,21 +71,68 @@ trait Parser
      */
     public function parse($content, $path = null)
     {
-        if (is_array($content)) {
-            $content = implode(PHP_EOL, $content);
-        }
-
         if (!$content) {
             # EMPTY CONTENT
             return [];
         }
 
+        $result = [];
+
+        if (is_array($content)) {
+            foreach ($content as $key => $value) {
+                if (stripos($value, '=') === false && is_string($key)) {
+                    $this->parseKeyValue($key, $value, $result);
+                } elseif (is_string($key) && !$value) {
+                    $this->parseString("$key=", $result, $path);
+                } else {
+                    $this->parseString($value, $result, $path);
+                }
+            }
+        } else {
+            $this->parseString($content, $result, $path);
+        }
+
+        # CHECK REQUIRE LIST
+        if ($requiredKey = $this->invalidateRequiredList()) {
+            throw new Loader("Env key \"$requiredKey\" required, is not defined!");
+        }
+
+        return $result;
+    }
+
+    /**
+     * Method for parse .env content with key/value
+     * @param  string $key    Env Key
+     * @param  string $value  Env Value
+     * @param  array  $result Result
+     * @throws Loader|Runtime
+     */
+    private function parseKeyValue($key, $value, &$result)
+    {
+        # CONVERT VALUE
+        $this->converter($key, $value);
+
+        # INVALIDATE VALUE
+        if ($rule = $this->invalidate($key, $value)) {
+            throw new Loader("Value \"$key\" does not meet rule \"$rule\"!");
+        }
+
+        # SAVE VALUE
+        $result[$key] = $value;
+        $this->put($key, $value);
+    }
+
+    /**
+     * Method for parse .env content by string
+     * @throws Loader|Runtime|Syntax
+     */
+    private function parseString($content, &$result, $path = null)
+    {
         # FIX BREAK LINE
         $content = str_replace([ '\r', "\r", '\n' ], [ "", "", "\n" ], $content);
 
         $lines = explode("\n", $content);
         $lineno = 0;
-        $result = [];
         do {
             $lineno++;
             $line = ltrim(array_shift($lines));
@@ -183,25 +231,8 @@ trait Parser
                 }
             }
 
-            # CONVERT VALUE
-            $this->converter($key, $value);
-
-            # INVALIDATE VALUE
-            if ($rule = $this->invalidate($key, $value)) {
-                throw new Loader("Value \"$key\" does not meet rule \"$rule\"!");
-            }
-
-            # SAVE VALUE
-            $result[$key] = $value;
-            $this->put($key, $value);
+            $this->parseKeyValue($key, $value, $result);
         } while ($lines);
-
-        # CHECK REQUIRE LIST
-        if ($requiredKey = $this->invalidateRequiredList()) {
-            throw new Loader("Env key \"$requiredKey\" required, is not defined!");
-        }
-
-        return $result;
     }
 
     /**

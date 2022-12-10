@@ -709,11 +709,11 @@ class ValidateTest extends TestCase
     public function testBootstrapParseString()
     {
         $dotenv = DotEnv::bootstrap([
-            'parse'   => "KEY1=AAA \n KEY2=BBB"
+            'parse'   => "KEY1=AAA \n KEY2=BBB \n KEY3='CCC\nDDD'"
         ]);
 
         $this->assertEquals(
-            [ 'KEY1' => 'AAA', 'KEY2' => 'BBB' ],
+            [ 'KEY1' => 'AAA', 'KEY2' => 'BBB', 'KEY3' => "CCC\nDDD" ],
             $dotenv->all()
         );
     }
@@ -726,12 +726,13 @@ class ValidateTest extends TestCase
         $dotenv = DotEnv::bootstrap([
             'parse'   => [
                 'KEY1=AAA',
-                'KEY2=BBB'
+                'KEY2' => 'BBB',
+                'KEY3' => "CCC\n\"'DDD"
             ]
         ]);
 
         $this->assertEquals(
-            [ 'KEY1' => 'AAA', 'KEY2' => 'BBB' ],
+            [ 'KEY1' => 'AAA', 'KEY2' => 'BBB', 'KEY3' => "CCC\n\"'DDD" ],
             $dotenv->all()
         );
     }
