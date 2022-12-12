@@ -12,7 +12,7 @@ use ReflectionClass;
 
 /**
  * class Converter
- * @package DotEnv\Utils
+ * @package DotEnv
  */
 class Converter implements IConverter
 {
@@ -95,7 +95,7 @@ class Converter implements IConverter
 
     /**
      * Method for set convert
-     * @param  string $convert Convert const
+     * @param  string        $convert  Convert const
      * @param  callable|null $callback Callback only TO_CUSTOM
      * @return $this
      * @throws Runtime

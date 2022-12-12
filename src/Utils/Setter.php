@@ -28,7 +28,7 @@ class Setter
     /**
      * Method for invoke method in all listeners
      * @param  string $method
-     * @param  array $args
+     * @param  array  $args
      * @return array
      */
     protected function invoke($method, $args = [])

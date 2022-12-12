@@ -12,7 +12,7 @@ use ReflectionClass;
 
 /**
  * class Rule
- * @package DotEnv\Utils
+ * @package DotEnv
  */
 class Rule implements IRule
 {
@@ -182,7 +182,7 @@ class Rule implements IRule
 
     /**
      * Method for set rule
-     * @param  string $rule Rule Key
+     * @param  string $rule  Rule Key
      * @param  mixed  $value Rule Value
      * @return $this
      * @throws Runtime
@@ -340,7 +340,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is required rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isRequired($status = true)
@@ -351,7 +351,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is not allow rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNotAllow($status = true)
@@ -362,7 +362,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is bool rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isBool($status = true)
@@ -373,7 +373,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is int rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isInt($status = true)
@@ -384,7 +384,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is float rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isFloat($status = true)
@@ -430,7 +430,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is string rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isString($status = true)
@@ -476,7 +476,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is empty rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isEmpty($status = true)
@@ -487,7 +487,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is not empty rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNotEmpty($status = true)
@@ -498,7 +498,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is null rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNull($status = true)
@@ -509,7 +509,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is not null rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNotNull($status = true)
@@ -520,7 +520,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is email rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isEmail($status = true)
@@ -531,7 +531,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is IP rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isIp($status = true)
@@ -542,7 +542,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is IPv4 rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isIpv4($status = true)
@@ -553,7 +553,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is IPv6 rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isIpv6($status = true)
@@ -564,7 +564,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is MAC rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isMac($status = true)
@@ -575,7 +575,7 @@ class Rule implements IRule
 
     /**
      * Method for enable/disable is URL rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isUrl($status = true)

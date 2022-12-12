@@ -13,7 +13,6 @@ use DotEnv\Exception\Runtime;
 use DotEnv\Exception\Syntax;
 use DotEnv\Rule;
 use DotEnv\Utils\IAdaptor;
-use PHP_CodeSniffer\Tokenizers\PHP;
 
 /**
  * Trait Parser
@@ -237,7 +236,7 @@ trait Parser
 
     /**
      * Method for set scheme convert/rules
-     * @param array $scheme Scheme convert/rules
+     * @param  array $scheme Scheme convert/rules
      * @return $this
      * @throws Syntax|Runtime
      */

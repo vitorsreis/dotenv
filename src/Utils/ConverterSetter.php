@@ -25,7 +25,7 @@ class ConverterSetter extends Setter implements IConverter
 
     /**
      * Method for set converter
-     * @param  string        $convert Convert const
+     * @param  string        $convert  Convert const
      * @param  callable|null $callback Callback only TO_CUSTOM
      * @return $this
      * @throws Runtime

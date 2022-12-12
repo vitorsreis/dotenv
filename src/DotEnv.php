@@ -49,7 +49,7 @@ class DotEnv
 
     /**
      * Method for get env value by key in Memory Adaptor
-     * @param  string $key Env Key
+     * @param  string      $key Env Key
      * @return string|null If success "string", else "null"
      * @throws Runtime
      */

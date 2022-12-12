@@ -17,6 +17,30 @@ use DotEnv\Utils\IAdaptor;
 class ApacheGetEnv implements IAdaptor
 {
     /**
+     * @throws Runtime
+     */
+    public function __construct()
+    {
+        static::invalidate();
+    }
+
+    /**
+     * Method for invalidate adaptor
+     * @throws Runtime
+     */
+    private static function invalidate()
+    {
+        if (!function_exists('\apache_setenv')) {
+            if (DotEnv::isDebug()) {
+                throw new Runtime("ApacheGetEnv Adaptor not supported");
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Method for adaptor put value
      * @param  string $key   Env Key
      * @param  mixed  $value Env Value
@@ -25,12 +49,8 @@ class ApacheGetEnv implements IAdaptor
      */
     public static function put($key, $value)
     {
-        if (!function_exists('\apache_setenv')) {
-            if (DotEnv::isDebug()) {
-                throw new Runtime("ApacheGetEnv Adaptor not supported");
-            } else {
-                return false;
-            }
+        if (static::invalidate()) {
+            return false;
         }
 
         return apache_setenv($key, $value);

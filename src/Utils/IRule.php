@@ -59,35 +59,35 @@ interface IRule
 
     /**
      * Method for enable/disable is required rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isRequired($status = true);
 
     /**
      * Method for enable/disable is not allow rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNotAllow($status = true);
 
     /**
      * Method for enable/disable is bool rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isBool($status = true);
 
     /**
      * Method for enable/disable is int rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isInt($status = true);
 
     /**
      * Method for enable/disable is float rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isFloat($status = true);
@@ -116,7 +116,7 @@ interface IRule
 
     /**
      * Method for enable/disable is string rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isString($status = true);
@@ -145,70 +145,70 @@ interface IRule
 
     /**
      * Method for enable/disable is empty rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isEmpty($status = true);
 
     /**
      * Method for enable/disable is not empty rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNotEmpty($status = true);
 
     /**
      * Method for enable/disable is null rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNull($status = true);
 
     /**
      * Method for enable/disable is not null rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isNotNull($status = true);
 
     /**
      * Method for enable/disable is email rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isEmail($status = true);
 
     /**
      * Method for enable/disable is IP rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isIp($status = true);
 
     /**
      * Method for enable/disable is IPv4 rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isIpv4($status = true);
 
     /**
      * Method for enable/disable is IPv6 rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isIpv6($status = true);
 
     /**
      * Method for enable/disable is MAC rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isMac($status = true);
 
     /**
      * Method for enable/disable is URL rule
-     * @param  bool $status Enable/Disable rule
+     * @param  bool  $status Enable/Disable rule
      * @return $this
      */
     public function isUrl($status = true);
